@@ -4,5 +4,8 @@
 
 #ifndef PROJECT_0A_S24_MATVII0392_TULS_H
 #define PROJECT_0A_S24_MATVII0392_TULS_H
-int scan (void);
+int scandirr (void);
+int readirr ();
+int opendirr ();
+
 #endif //PROJECT_0A_S24_MATVII0392_TULS_H
