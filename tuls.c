@@ -22,34 +22,30 @@ int isFile(const char *path) {
     return S_ISREG(path_stat.st_mode);
 }
 
-void listFilesRecursively(const char *basePath) {
-    char path[1000];
-    struct dirent *dp;
-    struct stat statbuf;
-    DIR *dir = opendir(basePath);
+void print_tree(const char *path, int depth) {
+    DIR *dir;
+    struct dirent *entry;
+    struct stat fileStat;
 
-    if (!dir) {
+    if (!(dir = opendir(path)))
         return;
-    }
 
-    while ((dp = readdir(dir)) != NULL) {
-        if (strcmp(dp->d_name, ".") != 0 && strcmp(dp->d_name, "..") != 0) {
-            sprintf(path, "%s/%s", basePath, dp->d_name);
-            if (isFile(path)) {
-                printf("%s\n", dp->d_name);
-            }
-            if (isDirectory(path)) {
-                printf("> %s\n", dp->d_name);
-                if (stat(path, &statbuf) == 0 && S_ISDIR(statbuf.st_mode)) {
-                    listFilesRecursively(path);
-                }
-                }
-
-            }
+    while ((entry = readdir(dir)) != NULL) {
+        if (entry->d_type == DT_DIR) {
+            char newPath[1024];
+            if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0)
+                continue;
+            snprintf(newPath, sizeof(newPath), "%s/%s", path, entry->d_name);
+            printf("%*s%s\n", depth, "", entry->d_name);
+            print_tree(newPath, depth + 4);
+        } else {
+            printf("%*s%s\n", depth, "", entry->d_name);
         }
-
-        closedir(dir);
     }
+    closedir(dir);
+}
+
+
 
     int main(int argc, char *argv[]) {
         DIR *dir;
@@ -117,6 +113,6 @@ void listFilesRecursively(const char *basePath) {
             //printf("%s\n", strcat(str1,positions[1]));
             //printf("%s\n", strcat(cwd, str1));
             //dir1 = opendir(strcat(cwd, str1));   //works
-            listFilesRecursively(strcat(cwd, str1));
+            print_tree(strcat(cwd, str1), 0);
         }
     }
