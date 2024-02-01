@@ -55,9 +55,17 @@ int main(int argc, char *argv[]) {
 
 
     printf("__________________________________________\n");
-    //char cwd2[1024];strcat("cwd", positions[1]);
+    //char cwd2[1024] = "%s", strcat("cwd", positions[1]);
+    //printf("%s\n", strcat(cwd, "/testf"));
     //printf("%s\n", strcat(cwd, strcat("/", positions[1])));
-    dir1 = opendir(strcat(cwd, strcat("/", positions[1])));
+    char str1[1024] = "/";
+    printf("%s\n", str1);
+    printf("%s\n", positions[1]);
+    strcat(str1,positions[1]);
+    printf("United: %s\n", str1);
+    //printf("%s\n", strcat(str1,positions[1]));
+    //printf("%s\n", strcat(cwd, str1));
+    dir1 = opendir(strcat(cwd, str1));   //works
     if (dir1 == NULL) {
         perror("opendir");
         exit(EXIT_FAILURE);
