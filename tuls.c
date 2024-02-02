@@ -28,7 +28,6 @@ int isFile(const char *path) {
 void print_hierarchy(const char *path, int depth) {
     DIR *dir;
     struct dirent *entry;
-    struct stat fileStat;
 
     if (!(dir = opendir(path)))
         return;
@@ -55,11 +54,10 @@ void print_hierarchy(const char *path, int depth) {
     int main(int argc, char *argv[]) {
         DIR *dir;
         struct dirent *entry;
-        char *cwds[10000];
-        struct dirent **namelist;
+        __attribute__((unused)) char *cwds[10000];
+        //struct dirent **namelist;
         char *positions[100];
-        int iterations = 0;
-        char cwd[1024];
+        //int iterations = 0;
 
 
         for (size_t i = 0; i < argc; i++) {
