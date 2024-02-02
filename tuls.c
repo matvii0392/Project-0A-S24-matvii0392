@@ -31,11 +31,12 @@ void print_tree(const char *path, int depth) {
         return;
 
     while ((entry = readdir(dir)) != NULL) {
+        if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, ".." ) == 0 || strcmp(entry->d_name, ".cmake" ) == 0 ||
+            strcmp(entry->d_name, ".DS_Store" ) == 0 || strcmp(entry->d_name, ".ninja_deps" ) == 0 || strcmp(entry->d_name, ".git" ) == 0 || strcmp(entry->d_name, ".idea" ) == 0) {
+            continue;
+        }
         if (entry->d_type == DT_DIR) {
             char newPath[1024];
-            if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, ".." ) == 0 || strcmp(entry->d_name, ".DS_Store" ) == 0) {
-                continue;
-            }
             snprintf(newPath, sizeof(newPath), "%s/%s", path, entry->d_name);
             printf("%*s%s\n", depth, "", entry->d_name);
             print_tree(newPath, depth + 4);
@@ -62,9 +63,8 @@ void print_tree(const char *path, int depth) {
 
         //printf("The length of the array is: %d\n", length);
 
-        printf("commandline args: \n\n");
         for (size_t i = 0; i < argc; i++) {
-            printf("Position %li:%s\n", i, argv[i]);
+            //printf("Position %li:%s\n", i, argv[i]);
             positions[i] = argv[i];
         }
 
@@ -122,7 +122,7 @@ void print_tree(const char *path, int depth) {
                 }
             }
             closedir(dir);
-            printf("%s\n", "-------Searched directory--------");
+            //printf("%s\n", "-------Searched directory--------");
             char str1[1024] = "/";
             strcat(str1, positions[1]);
             print_tree(strcat(cwd, str1), 0);
